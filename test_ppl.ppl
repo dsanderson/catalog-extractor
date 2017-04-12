@@ -1,5 +1,14 @@
 var flips = [true, false, true, true, false, false];
 
+var get = function(iter, i) { //for numeric arrays, return the value of the item at index i
+  var arr = mapIndexed(function(index, value) {if(index==i) {return value} else {return 0};}, iter);
+  return sum(arr)
+};
+
+var estimate_text = function(img_data, prob_data, x, y, window_x, window_y, ratio) {
+  var data = filter(function(index, ) {})
+};
+
 var model = function() {
   var fairness = uniform(0,1);
   //use factor statements over the pixels
@@ -13,3 +22,7 @@ var model = function() {
 
 var model_dist = Infer({method: 'MCMC', samples: 10000, burn: 2000}, model);
 Math.exp(model_dist.score(true));
+
+display("Testing *get*");
+display(flips.length);
+display(get(flips, 2));
