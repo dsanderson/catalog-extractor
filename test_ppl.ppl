@@ -8,11 +8,19 @@ var make_window = function(data, width, height, x, y, window_x, window_y) {
     var wy = Math.floor(n/window_x);
     var x0 = x-Math.floor(window_x/2);
     var y0 = y-Math.floor(window_y/2);
-    var ind = (wx+x0)+(wy+y0)*width;
-    return ind;
+    var px = x0+wx;
+    var py = y0+wy;
+    if ((px<0) || (py<0) || (px>=width) || (py>=height)) {
+      return -1;
+    }
+    else {
+      var ind = (wx+x0)+(wy+y0)*width;
+      return ind;
+    };
   }, window_x*window_y);
-  var inds = filter(function(x))
-}
+  var inds = filter(function(x) {return (x>-1);}, inds);
+  return inds;
+};
 
 var estimate_text = function(img_data, prob_data, x, y, window_x, window_y, ratio) {
   //var data = filter(function(index, ) {})
@@ -32,5 +40,37 @@ var model = function() {
 var model_dist = Infer({method: 'MCMC', samples: 10000, burn: 2000}, model);
 Math.exp(model_dist.score(true));
 
-display("Testing *get*");
 display(flips[1]);
+//tests for the make_window function
+var test_make_window = function() {
+  display("*****Testing make_window function*****");
+  var w = 10;
+  var h = 8;
+  var ww = 3;
+  var wh = 5;
+  var inds = make_window([],w,h,0,0,ww,wh);
+  display("Window clipped at 0,0");
+  display(inds.length == 6);
+
+  var inds = make_window([],w,h,9,7,ww,wh);
+  display("Window clipped at 9,7");
+  display(inds.length == 6);
+
+  var inds = make_window([],w,h,9,0,ww,wh);
+  display("Window clipped at 9,0");
+  display(inds.length == 6);
+
+  var inds = make_window([],w,h,0,7,ww,wh);
+  display("Window clipped at 0,7");
+  display(inds.length == 6);
+
+  var inds = make_window([],w,h,0,6,ww,wh);
+  display("Window clipped at 0,6");
+  display(inds.length == 8);
+
+  var inds = make_window([],w,h,5,5,ww,wh);
+  display("Window not clipped at 5,5");
+  display(inds.length == 15);
+};
+
+test_make_window();
