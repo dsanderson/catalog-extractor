@@ -5,6 +5,10 @@ RUN apt-get install -y tesseract-ocr
 RUN pip install --upgrade pip
 RUN pip install pyocr
 
-COPY ocr-test.py ocr-test.py
+RUN pip install flask
 
-CMD python ocr-test.py
+COPY ocr-test.py ocr-test.py
+COPY scoring_interface.py scoring_interface.py
+
+#CMD python ocr-test.py
+CMD python scoring_interface.py
